@@ -1,5 +1,5 @@
-# Consul & Monk
-This repository contains Monk.io template to deploy Consul either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
+# Keyclock & Monk
+This repository contains Monk.io template to deploy Keyclock either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
 # Prerequisites
 - [Install Monk](https://docs.monk.io/docs/get-monk)
@@ -25,7 +25,6 @@ git clone https://github.com/Burakhan/monk-keyclock
 cd monk-keyclock
 monk load MANIFEST
 ```
-
 
 #### Let's take a look at the themes I have installed.
 ```bash
