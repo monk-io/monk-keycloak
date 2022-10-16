@@ -47,16 +47,11 @@ keyclock-web:
       env: KEYCLOAK_PORT
       type: int
       value: <- `${keyclock_port}`
-    volume_local:
-      type: string
-      value: <- `${monk-volume-path}/monk-mssql`
   containers:
     keyclock-container:
       image: quay.io/keycloak/keycloak:legacy
       ports:
         - <- `0.0.0.0:${keyclock_port}:8080`
-      paths:
-        - <- `${volume_local}:/var/opt/mssql`
   depends:
     wait-for:
       runnables:
