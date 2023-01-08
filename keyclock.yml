@@ -10,6 +10,10 @@ keyclock-web:
     icon: https://www.keycloak.org/resources/images/keycloak_logo_200px.svg
 
   defines: runnable
+  connections:
+    keyclock-db:
+      runnable: monk-keyclock/keyclock-db
+      service: keyclock-db-svc
   variables:
     monk_db_vendor:
       env: DB_VENDOR
@@ -90,3 +94,9 @@ keyclock-db:
       image: postgres
       ports:
         - <- `0.0.0.0:${db-port}:5432`
+  services:
+    keyclock-db:
+      port: 5432
+      container: postgres
+      protocol: tcp
+      host-port: <- `${db-port}` to-i
