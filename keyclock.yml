@@ -1,4 +1,4 @@
-namespace: monk-keyclock
+namespace: keyclock
 
 keyclock-web:
   metadata:
@@ -12,7 +12,7 @@ keyclock-web:
   defines: runnable
   connections:
     keyclock-db:
-      runnable: monk-keyclock/keyclock-db
+      runnable: keyclock/keyclock-db
       service: keyclock-db-svc
   variables:
     monk_db_vendor:
@@ -22,7 +22,7 @@ keyclock-web:
     monk_db_addr:
       env: DB_ADDR
       type: string
-      value: <- get-hostname("monk-keyclock/keyclock-db", "postgres") split(".dns.podman") join("")
+      value: <- get-hostname("keyclock/keyclock-db", "postgres") split(".dns.podman") join("")
     monk_db_name:
       env: DB_DATABASE
       type: string
@@ -59,7 +59,7 @@ keyclock-web:
   depends:
     wait-for:
       runnables:
-        - monk-keyclock/keyclock-db
+        - keyclock/keyclock-db
 
 keyclock-db: 
   defines: runnable
