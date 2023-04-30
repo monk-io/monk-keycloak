@@ -13,7 +13,7 @@ keyclock-web:
   connections:
     keyclock-db:
       runnable: keyclock/keyclock-db
-      service: keyclock-db-svc
+      service: keyclock-db
   variables:
     monk_db_vendor:
       env: DB_VENDOR
@@ -61,7 +61,7 @@ keyclock-web:
       runnables:
         - keyclock/keyclock-db
 
-keyclock-db: 
+keyclock-db:
   defines: runnable
   variables:
     image-tag:
