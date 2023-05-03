@@ -1,0 +1,110 @@
+namespace: keycloak
+
+
+base:
+  metadata:
+    name: Keycloak
+    shortname: Keycloak
+    description: |
+      Keycloak is an open-source identity and access management (IAM) solution developed by Red Hat. It provides a unified platform for managing user authentication, authorization, and security across multiple applications and services.
+
+      Keycloak supports a wide range of authentication protocols, including OpenID Connect, OAuth 2.0, and SAML 2.0. It also provides a customizable user interface for managing users and groups, as well as a range of security features such as two-factor authentication, password policies, and brute-force attack prevention.
+
+      One of the key features of Keycloak is its ability to integrate with a wide range of applications and services, including web applications, mobile apps, and microservices. It provides a single sign-on (SSO) solution that allows users to authenticate once and access multiple services without having to provide credentials multiple times.
+
+      Keycloak also provides a range of integration options, including REST APIs, Java APIs, and a JavaScript API. This makes it easy for developers to integrate Keycloak into their applications and services, and to customize the authentication and authorization flows to meet their specific requirements.
+    website: https://www.keycloak.org/
+    publisher: monk.io
+    tags: Identity and access management (IAM), open-source, authentication, authorization, security, user management, group management, customizable user interface, two-factor authentication, password policies, brute-force attack prevention, single sign-on (SSO), integration options, REST APIs, Java APIs, JavaScript API, authentication protocols, OpenID Connect, OAuth 2.0, SAML 2.0
+    icon: https://www.keycloak.org/resources/images/keycloak_logo_200px.svg
+  variables:
+    image_tag:
+      type: string
+      value: latest
+  containers:
+    keycloak:
+      image: quay.io/keycloak/keycloak
+      image-tag: <- `${image_tag}`
+
+keycloak:
+  defines: runnable
+  inherits: keycloak/base
+  connections:
+    db:
+      runnable: keycloak/postgres
+      service: db-svc
+  variables:
+    monk_db_vendor:
+      env: DB_VENDOR
+      type: string
+      value: postgres
+    monk_db_addr:
+      env: DB_ADDR
+      type: string
+      value: <- connection-hostname("db") split(".dns.podman") join("")
+    monk_db_name:
+      env: DB_DATABASE
+      type: string
+      value: keycloak
+    monk_db_user:
+      env: DB_USER
+      type: string
+      value: monk
+    monk_db_schema:
+      env: DB_SCHEMA
+      type: string
+      value: keycloak
+    monk_db_password:
+      env: DB_PASSWORD
+      type: string
+      value: monk
+    monk_keycloak_user:
+      env: KEYCLOAK_USER
+      type: string
+      value: monk
+    monk_keycloak_password:
+      env: KEYCLOAK_PASSWORD
+      type: string
+      value: monk
+    monk_keycloak_port:
+      env: KEYCLOAK_PORT
+      type: int
+      value: 8080
+  depends:
+    wait-for:
+      runnables:
+        - keycloak/postgres
+
+postgres: 
+  defines: runnable
+  metadata:
+    private: true
+  variables:
+    image-tag:
+      type: string
+      value: latest
+    db-password:
+      env: POSTGRES_PASSWORD
+      value: monk
+      type: string
+    db-user:
+      env: POSTGRES_USER
+      value: monk
+      type: string
+    db-name:
+      env: POSTGRES_DB
+      value: keycloak
+      type: string
+    db-trust:
+      env: POSTGRES_HOST_AUTH_METHOD
+      value: trust
+  containers:
+    defines: containers
+    postgres:
+      image-tag: <- `${image-tag}`
+      image: postgres
+  services:
+    db-svc:
+      port: 5432
+      container: postgres
+      protocol: tcp

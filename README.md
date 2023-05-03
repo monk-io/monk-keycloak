@@ -1,5 +1,5 @@
-# Keyclock & Monk
-This repository contains Monk.io template to deploy Keyclock either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
+# Keycloak & Monk
+This repository contains Monk.io template to deploy Keycloak either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
 # Prerequisites
 - [Install Monk](https://docs.monk.io/docs/get-monk)
@@ -17,54 +17,54 @@ not connected to cluster
 
 ## Clone Repository
 ```bash
-git clone https://github.com/monk-io/keyclock
+git clone https://github.com/monk-io/keycloak
 ```
 
 ## Load Template
 ```bash
-cd keyclock
+cd keycloak
 monk load MANIFEST
 ```
 
 #### Let's take a look at the themes I have installed.
 ```bash
-foo@bar:~$ monk list keyclock
+foo@bar:~$ monk list keycloak
 ✔ Got the list
 Type      Template                    Repository  Version  Tags
-runnable  keyclock/keyclock-db   local       -        -
-runnable  keyclock/keyclock-web  local       -        -
-group     keyclock/stack         local       -        -
+runnable  keycloak/keycloak-db   local       -        -
+runnable  keycloak/keycloak-web  local       -        -
+group     keycloak/stack         local       -        -
 ```
 
 ## Deploy Stack
 ```bash
 foo@bar:~$ monk run monk-consul/stack
-? Select tag to run [local/keyclock/stack] on: mnk
-✔ Starting the job: local/keyclock/stack... DONE
+? Select tag to run [local/keycloak/stack] on: mnk
+✔ Starting the job: local/keycloak/stack... DONE
 ✔ Preparing nodes DONE
 ✔ Checking/pulling images...
 ✔ [================================================] 100% postgres:latest mnk
 ✔ [================================================] 100% quay.io/keycloak/keycloak:legacy mnk
 ✔ Checking/pulling images DONE
 ✔ Starting containers DONE
-✔ Started local/keyclock/stack
+✔ Started local/keycloak/stack
 
-🔩 templates/local/keyclock/stack
+🔩 templates/local/keycloak/stack
  └─🧊 Peer mnk
-    ├─🔩 templates/local/keyclock/keyclock-db
-    │  └─📦 7794ccb846e06b05793752881bf4c929--keyclock-keyclock-db-postgres
+    ├─🔩 templates/local/keycloak/keycloak-db
+    │  └─📦 7794ccb846e06b05793752881bf4c929--keycloak-keycloak-db-postgres
     │     ├─🧩 postgres:latest
-    │     ├─💾 /var/lib/monkd/volumes/keyclock/db_data -> /var/lib/postgresql/data
+    │     ├─💾 /var/lib/monkd/volumes/keycloak/db_data -> /var/lib/postgresql/data
     │     └─🔌 open 13.50.100.228:5432 (0.0.0.0:5432) -> 5432
-    └─🔩 templates/local/keyclock/keyclock-web
-       └─📦 7e385cfff55cb3888238bc22e2a10542-eyclock-web-keyclock-container
+    └─🔩 templates/local/keycloak/keycloak-web
+       └─📦 7e385cfff55cb3888238bc22e2a10542-eyclock-web-keycloak-container
           ├─🧩 quay.io/keycloak/keycloak:legacy
           ├─💾 /var/lib/monkd/volumes/monk-mssql -> /var/opt/mssql
           └─🔌 open 13.50.100.228:8080 (0.0.0.0:8080) -> 8080
 
 💡 You can inspect and manage your above stack with these commands:
-	monk logs (-f) local/keyclock/stack - Inspect logs
-	monk shell     local/keyclock/stack - Connect to the container's shell
+	monk logs (-f) local/keycloak/stack - Inspect logs
+	monk shell     local/keycloak/stack - Connect to the container's shell
 	monk do        local/
 
 ```
@@ -77,14 +77,14 @@ The variables are in `stack.yml` file. You can quickly setup by editing the valu
 
 | Variable                     	| Description                               	|
 |------------------------------	|-------------------------------------------	|
-| database_name                 | Keyclock database name, Default: keyclock     |
-| database_user                 | Keyclock database user, Default keyclock      |
-| database_schema               | Keyclock database schema, Default: public    	|
-| database_password             | Keyclock database password, Default: keyclock    	|
-| keyclock_user                 | Keyclock web user, Default keyclock          	|
-| keyclock_password             | Keyclock web password, Default 8001         	|
-| database_port                 | Keyclock database port Default: 5432            	|
-| keyclock_port                 | Keyclock web port Default: 8080             	|
+| database_name                 | Keycloak database name, Default: keycloak     |
+| database_user                 | Keycloak database user, Default keycloak      |
+| database_schema               | Keycloak database schema, Default: public    	|
+| database_password             | Keycloak database password, Default: keycloak    	|
+| keycloak_user                 | Keycloak web user, Default keycloak          	|
+| keycloak_password             | Keycloak web password, Default 8001         	|
+| database_port                 | Keycloak database port Default: 5432            	|
+| keycloak_port                 | Keycloak web port Default: 8080             	|
 
 ## Stop, remove and clean up workloads and templates
 

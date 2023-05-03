@@ -1,2 +1,2 @@
-REPO keyclock
-LOAD keyclock.yml stack.yml
+REPO keycloak
+LOAD keycloak.yml stack.yml

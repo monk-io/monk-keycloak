@@ -1,32 +1,8 @@
-namespace: keyclock
+---
+namespace: keycloak
 
 stack:
   defines: process-group
   runnable-list:
-    - keyclock/keyclock-web
-    - keyclock/keyclock-db
-  variables:
-    database_name:
-      type: string
-      value: keyclock
-    database_user:
-      type: string
-      value: keyclock
-    database_schema:
-      type: string
-      value: public
-    database_password:
-      type: string
-      value: keyclock
-    keyclock_user:
-      type: string
-      value: keyclock
-    keyclock_password:
-      type: string
-      value: keyclock
-    database_port:
-      type: int
-      value: 5432
-    keyclock_port:
-      type: int
-      value: 8080
+    - keycloak/keycloak
+    - keycloak/postgres
