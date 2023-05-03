@@ -1,5 +1,5 @@
+---
 namespace: keycloak
-
 
 base:
   metadata:
@@ -7,15 +7,13 @@ base:
     shortname: Keycloak
     description: |
       Keycloak is an open-source identity and access management (IAM) solution developed by Red Hat. It provides a unified platform for managing user authentication, authorization, and security across multiple applications and services.
-
       Keycloak supports a wide range of authentication protocols, including OpenID Connect, OAuth 2.0, and SAML 2.0. It also provides a customizable user interface for managing users and groups, as well as a range of security features such as two-factor authentication, password policies, and brute-force attack prevention.
-
       One of the key features of Keycloak is its ability to integrate with a wide range of applications and services, including web applications, mobile apps, and microservices. It provides a single sign-on (SSO) solution that allows users to authenticate once and access multiple services without having to provide credentials multiple times.
-
       Keycloak also provides a range of integration options, including REST APIs, Java APIs, and a JavaScript API. This makes it easy for developers to integrate Keycloak into their applications and services, and to customize the authentication and authorization flows to meet their specific requirements.
     website: https://www.keycloak.org/
     publisher: monk.io
-    tags: Identity and access management (IAM), open-source, authentication, authorization, security, user management, group management, customizable user interface, two-factor authentication, password policies, brute-force attack prevention, single sign-on (SSO), integration options, REST APIs, Java APIs, JavaScript API, authentication protocols, OpenID Connect, OAuth 2.0, SAML 2.0
+    tags: Identity and access management (IAM), open-source, authentication, authorization, security, user management, group management, customizable user interface, two-factor authentication, password policies, brute-force attack prevention, single sign-on (SSO), integration options, REST APIs, Java
+      APIs, JavaScript API, authentication protocols, OpenID Connect, OAuth 2.0, SAML 2.0
     icon: https://www.keycloak.org/resources/images/keycloak_logo_200px.svg
   variables:
     image_tag:
@@ -75,7 +73,7 @@ keycloak:
       runnables:
         - keycloak/postgres
 
-postgres: 
+postgres:
   defines: runnable
   metadata:
     private: true
