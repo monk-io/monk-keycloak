@@ -23,6 +23,7 @@ base:
     keycloak:
       image: quay.io/keycloak/keycloak
       image-tag: <- `${image_tag}`
+      bash: /opt/keycloak/bin/kc.sh start-dev
 
 keycloak:
   defines: runnable
@@ -64,10 +65,14 @@ keycloak:
       env: KEYCLOAK_PASSWORD
       type: string
       value: monk
-    monk_keycloak_port:
-      env: KEYCLOAK_PORT
-      type: int
-      value: 8080
+      
+  services:
+    keycloak-svc:
+      port: 8080
+      protocol: tcp
+      container: keycloak
+      host-port: 8080
+
   depends:
     wait-for:
       runnables:

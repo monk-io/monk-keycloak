@@ -4,5 +4,6 @@ namespace: keycloak
 stack:
   defines: process-group
   runnable-list:
-    - keycloak/keycloak
     - keycloak/postgres
+    - keycloak/keycloak
+    
