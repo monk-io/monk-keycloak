@@ -1,13 +1,16 @@
 # Keycloak & Monk
+
 This repository contains Monk.io template to deploy Keycloak either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
-# Prerequisites
+## Prerequisites
+
 - [Install Monk](https://docs.monk.io/docs/get-monk)
 - [Register and Login Monk](https://docs.monk.io/docs/acc-and-auth)
 - [Add Cloud Provider](https://docs.monk.io/docs/cloud-provider)
 - [Add Instance](https://docs.monk.io/docs/multi-cloud)
 
-#### Make sure monkd is running.
+## Make sure monkd is running
+
 ```bash
 foo@bar:~$ monk status
 daemon: ready
@@ -16,17 +19,18 @@ not connected to cluster
 ```
 
 ## Clone Repository
+
 ```bash
 git clone https://github.com/monk-io/keycloak
 ```
 
 ## Load Template
+
 ```bash
 cd keycloak
 monk load MANIFEST
 ```
 
-#### Let's take a look at the themes I have installed.
 ```bash
 foo@bar:~$ monk list keycloak
 ✔ Got the list
@@ -37,6 +41,7 @@ group     keycloak/stack         local       -        -
 ```
 
 ## Deploy Stack
+
 ```bash
 foo@bar:~$ monk run monk-consul/stack
 ? Select tag to run [local/keycloak/stack] on: mnk
@@ -63,32 +68,33 @@ foo@bar:~$ monk run monk-consul/stack
           └─🔌 open 13.50.100.228:8080 (0.0.0.0:8080) -> 8080
 
 💡 You can inspect and manage your above stack with these commands:
-	monk logs (-f) local/keycloak/stack - Inspect logs
-	monk shell     local/keycloak/stack - Connect to the container's shell
-	monk do        local/
+ monk logs (-f) local/keycloak/stack - Inspect logs
+ monk shell     local/keycloak/stack - Connect to the container's shell
+ monk do        local/
 
 ```
+
 ## Test Web UI
 
 `http://13.50.100.228:8080/auth/`
 
 ## Variables
+
 The variables are in `stack.yml` file. You can quickly setup by editing the values here.
 
-| Variable                     	| Description                               	|
-|------------------------------	|-------------------------------------------	|
-| database_name                 | Keycloak database name, Default: keycloak     |
-| database_user                 | Keycloak database user, Default keycloak      |
-| database_schema               | Keycloak database schema, Default: public    	|
-| database_password             | Keycloak database password, Default: keycloak    	|
-| keycloak_user                 | Keycloak web user, Default keycloak          	|
-| keycloak_password             | Keycloak web password, Default 8001         	|
-| database_port                 | Keycloak database port Default: 5432            	|
-| keycloak_port                 | Keycloak web port Default: 8080             	|
+| Variable          | Description                                   |
+| ----------------- | --------------------------------------------- |
+| database_name     | Keycloak database name, Default: keycloak     |
+| database_user     | Keycloak database user, Default keycloak      |
+| database_schema   | Keycloak database schema, Default: public     |
+| database_password | Keycloak database password, Default: keycloak |
+| keycloak_user     | Keycloak web user, Default keycloak           |
+| keycloak_password | Keycloak web password, Default 8001           |
+| database_port     | Keycloak database port Default: 5432          |
+| keycloak_port     | Keycloak web port Default: 8080               |
 
 ## Stop, remove and clean up workloads and templates
 
 ```bash
 monk purge -x -a
 ```
-

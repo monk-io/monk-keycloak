@@ -6,4 +6,19 @@ stack:
   runnable-list:
     - keycloak/postgres
     - keycloak/keycloak
-    
+  variables:
+    db_name:
+      type: string
+      value: keycloak
+    db_user:
+      type: string
+      value: monk
+    db_pass:
+      type: string
+      value: monk
+    kc_user:
+      type: string
+      value: admin
+    kc_pass:
+      type: string
+      value: admin
