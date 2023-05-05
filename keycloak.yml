@@ -59,6 +59,13 @@ keycloak:
       env: KEYCLOAK_ADMIN_PASSWORD
       type: string
       value: <- $kc_pass default("monk")
+    ip-address-public:
+      type: string
+      value: <- ip-address-public
+    hostname:
+      env: KC_HOSTNAME
+      type: string
+      value: <- $hostname default($ip-address-public)
   services:
     keycloak:
       port: 8080
