@@ -18,7 +18,7 @@ base:
 
       Notes:
 
-      Default login/password: admin/admin.
+      Default login/password: monk/monk.
 
       If running on unsecure http port, you need to run specific action to disable https requirement.
 
@@ -28,7 +28,7 @@ base:
       monk do keycloak/keycloak/disable-admin-https
       ```
 
-      Specify parameters like that: `user=admin pass=admin`.
+      Specify parameters like that: `user=monk pass=monk`.
     website: https://www.keycloak.org/
     source: https://github.com/keycloak/keycloak
     publisher: monk.io
