@@ -13,16 +13,43 @@ base:
       One of the key features of Keycloak is its ability to integrate with a wide range of applications and services, including web applications, mobile apps, and microservices. It provides a single sign-on (SSO) solution that allows users to authenticate once and access multiple services without having to provide credentials multiple times.
 
       Keycloak also provides a range of integration options, including REST APIs, Java APIs, and a JavaScript API. This makes it easy for developers to integrate Keycloak into their applications and services, and to customize the authentication and authorization flows to meet their specific requirements.
+
+      ---
+
+      Notes:
+
+      Default login/password: admin/admin.
+
+      If running on unsecure http port, you need to run specific action to disable https requirement.
+
+      To do that, connect to your cluster and issue a monk action:
+
+      ``` bash
+      monk do keycloak/keycloak/disable-admin-https
+      ```
+
+      Specify parameters like that: `user=admin pass=admin`.
     website: https://www.keycloak.org/
+    source: https://github.com/keycloak/keycloak
     publisher: monk.io
-    tags: Identity and access management (IAM), open-source, authentication, authorization, security, user management, group management, customizable user interface, two-factor authentication, password policies, brute-force attack prevention, single sign-on (SSO), integration options, REST APIs, Java
-      APIs, JavaScript API, authentication protocols, OpenID Connect, OAuth 2.0, SAML 2.0
+    tags: Identity and access management (IAM), open-source, authentication, authorization, security, user management, group management, customizable user interface, two-factor authentication, password policies, brute-force attack prevention, single sign-on (SSO), integration options, REST APIs, Java APIs, JavaScript API, authentication protocols, OpenID Connect, OAuth 2.0, SAML 2.0
     icon: https://www.keycloak.org/resources/images/keycloak_logo_200px.svg
   containers:
     keycloak:
       image: quay.io/keycloak/keycloak
       image-tag: latest
       bash: /opt/keycloak/bin/kc.sh start-dev
+  actions:
+    disable-admin-https:
+      arguments:
+        user:
+          description: User name
+          type: string
+        pass:
+          description: User pass
+          type: string
+      code: exec("keycloak", "/bin/bash", "-c", `cd /opt/keycloak/bin; ./kcadm.sh config credentials --server http://localhost:8080 --realm master --user ${args["user"]} --password ${args["pass"]}; ./kcadm.sh update realms/master -s sslRequired=NONE`)
+      description: Disables the requirement for https on admin interface
 
 keycloak:
   defines: runnable
@@ -76,17 +103,6 @@ keycloak:
     wait-for:
       runnables:
         - keycloak/postgres
-  actions:
-    disable-admin-https:
-      arguments:
-        user:
-          description: User name
-          type: string
-        pass:
-          description: User pass
-          type: string
-      code: exec("keycloak", "/bin/bash", "-c", `cd /opt/keycloak/bin; ./kcadm.sh config credentials --server http://localhost:8080 --realm master --user ${args["user"]} --password ${args["pass"]}; ./kcadm.sh update realms/master -s sslRequired=NONE`)
-      description: Disables the requirement for https on admin interface
 
 postgres:
   defines: runnable
