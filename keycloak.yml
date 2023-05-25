@@ -32,7 +32,7 @@ base:
     website: https://www.keycloak.org/
     source: https://github.com/keycloak/keycloak
     publisher: monk.io
-    tags: Identity and access management (IAM), open-source, authentication, authorization, security, user management, group management, customizable user interface, two-factor authentication, password policies, brute-force attack prevention, single sign-on (SSO), integration options, REST APIs, Java APIs, JavaScript API, authentication protocols, OpenID Connect, OAuth 2.0, SAML 2.0
+    tags: java apis, authorization, single sign-on, user management, security, open-source, customizable user interface, javascript api, oauth 2.0, group management, rest apis, integration options, two-factor authentication, saml 2.0, identity and access management, password policies, brute-force attack prevention, authentication protocols, openid connect
     icon: https://www.keycloak.org/resources/images/keycloak_logo_200px.svg
   containers:
     keycloak:
