@@ -92,7 +92,7 @@ keycloak:
     hostname:
       env: KC_HOSTNAME
       type: string
-      value: <- $hostname default($ip-address)
+      value: <- $kc_hostname default($ip-address)
   services:
     keycloak:
       port: 8080
