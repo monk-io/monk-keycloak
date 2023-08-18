@@ -45,9 +45,11 @@ base:
         user:
           description: User name
           type: string
+          default: monk
         pass:
           description: User pass
           type: string
+          default: monk
       code: exec("keycloak", "/bin/bash", "-c", `cd /opt/keycloak/bin; ./kcadm.sh config credentials --server http://localhost:8080 --realm master --user ${args["user"]} --password ${args["pass"]}; ./kcadm.sh update realms/master -s sslRequired=NONE`)
       description: Disables the requirement for https on admin interface
 
