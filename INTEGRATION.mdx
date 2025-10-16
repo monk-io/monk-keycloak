@@ -1,0 +1,178 @@
+---
+title: Keycloak
+description: Ready-to-run Keycloak container stack you can run directly or inherit to integrate identity and access management into your applications.
+primary_category: security
+tags: [keycloak, authentication, iam, template, runnable, stack, sso, oauth2]
+integration_type: template
+hosting_models: [self-hosted]
+website_url: https://www.keycloak.org/
+docs_url: https://www.keycloak.org/documentation
+publisher: monk.io
+---
+
+## Overview
+
+This template provides a production‑ready Keycloak stack as a Monk runnable. You can:
+
+- Run it directly to get a managed Keycloak instance with integrated PostgreSQL database
+- Inherit it in your own runnable to seamlessly add authentication and authorization capabilities to your stack
+
+It exposes Keycloak on port 8080, includes a PostgreSQL database for persistence, and provides a fully configured admin console with single sign-on, social login, and user federation capabilities.
+
+## What this template manages
+
+- Keycloak server container (development mode, configurable tag)
+- PostgreSQL database (user and configuration storage)
+- Network service on port 8080
+- Admin console with customizable realm settings
+- Authentication flows and identity brokering
+- Database connection and credential management
+
+## Quick start (run directly)
+
+1) Load templates
+
+```bash
+monk load MANIFEST
+```
+
+2) Run Keycloak stack with defaults
+
+```bash
+monk run keycloak/stack
+```
+
+3) Customize credentials (recommended via inheritance)
+
+Running directly uses the defaults defined in this template's `variables`. Secrets added with `monk secrets add` will not affect this runnable unless you inherit it and reference those secrets.
+
+- Preferred: inherit and replace variables with `secret("...")` as shown below.
+- Alternative: fork/clone and edit the `variables` in `keycloak/stack.yml`, then `monk load MANIFEST` and run.
+
+Once started, access the admin console at `http://localhost:8080` (or the runnable hostname inside Monk networks) using the configured admin credentials.
+
+**Important:** Default credentials are `admin/admin` for Keycloak admin and `monk/monk` for database. Change these in production!
+
+## Configuration
+
+Key variables you can customize in this template:
+
+```yaml
+variables:
+  db_name: "keycloak"        # PostgreSQL database name (env: POSTGRES_DB)
+  db_user: "monk"            # PostgreSQL username (env: POSTGRES_USER)
+  db_pass: "monk"            # PostgreSQL password (env: POSTGRES_PASSWORD)
+  kc_user: "admin"           # Keycloak admin username (env: KEYCLOAK_ADMIN)
+  kc_pass: "admin"           # Keycloak admin password (env: KEYCLOAK_ADMIN_PASSWORD)
+  kc_hostname: ""            # Keycloak hostname (defaults to public IP)
+```
+
+The stack automatically configures the database connection between Keycloak and PostgreSQL using the provided credentials.
+
+## Use by inheritance (recommended for apps)
+
+Inherit the Keycloak stack in your application and declare a connection. Example:
+
+```yaml
+namespace: myapp
+auth:
+  defines: process-group
+  inherits: keycloak/stack
+  variables:
+    db_name:
+      value: <- secret("keycloak-db-name")
+    db_user:
+      value: <- secret("keycloak-db-user")
+    db_pass:
+      value: <- secret("keycloak-db-password")
+    kc_user:
+      value: <- secret("keycloak-admin-user")
+    kc_pass:
+      value: <- secret("keycloak-admin-password")
+    kc_hostname:
+      value: <- secret("keycloak-hostname")
+
+api:
+  defines: runnable
+  containers:
+    api:
+      image: myorg/api
+  variables:
+    auth-server-url:
+      value: "http://localhost:8080"
+    auth-realm:
+      value: "myrealm"
+    auth-client-id:
+      value: "myapp-client"
+```
+
+Then set the secrets once and run your app group:
+
+```bash
+monk secrets add -g keycloak-db-name="keycloak"
+monk secrets add -g keycloak-db-user="keycloak_user"
+monk secrets add -g keycloak-db-password="STRONG_DB_PASSWORD"
+monk secrets add -g keycloak-admin-user="admin"
+monk secrets add -g keycloak-admin-password="STRONG_ADMIN_PASSWORD"
+monk secrets add -g keycloak-hostname="auth.yourdomain.com"
+monk run myapp/auth
+```
+
+## Stack components
+
+- `keycloak/keycloak` - Keycloak server (port 8080)
+- `keycloak/postgres` - PostgreSQL database (port 5432, internal)
+
+## Ports and connectivity
+
+- Service: `keycloak` on TCP port `8080`
+- Admin console: `http://<hostname>:8080/admin`
+- From other runnables in the same process group, use `connection-hostname("<connection-name>")` to resolve the Keycloak host.
+
+## HTTPS Configuration
+
+By default, Keycloak requires HTTPS for production use. If running on HTTP (development), you may need to disable the HTTPS requirement:
+
+```bash
+monk do keycloak/keycloak/disable-admin-https user=admin pass=admin
+```
+
+This action configures the master realm to accept HTTP connections. Always use HTTPS in production environments.
+
+## Features
+
+- **Single Sign-On (SSO)** - Authenticate once, access multiple services
+- **Identity brokering and social login** - Google, Facebook, GitHub, and more
+- **User federation** - LDAP and Active Directory integration
+- **OAuth 2.0 and OpenID Connect** - Industry-standard protocols
+- **Fine-grained authorization** - Role-based and attribute-based access control
+- **Admin console** - Web-based management interface
+- **Account management** - Self-service user profile and password management
+- **Two-factor authentication** - OTP, WebAuthn, and more
+- **Brute-force protection** - Built-in security measures
+
+## Related templates
+
+- See other templates in this repository for complementary services
+- Combine with monitoring tools (`prometheus-grafana/`) for observability
+- Integrate with your application stack as needed
+- For PostgreSQL alternatives, see `postgresql/` template in this repository
+
+## Troubleshooting
+
+- If you changed `kc_pass` but Keycloak has existing data, authentication may fail. Reset the database or update credentials inside Keycloak to match.
+- Ensure the database connection is healthy before Keycloak starts (handled automatically via `depends` directive).
+- For HTTPS errors in development, run the `disable-admin-https` action as shown above.
+- Check logs:
+
+```bash
+monk logs -l 500 -f keycloak/stack
+```
+
+- View individual component logs:
+
+```bash
+monk logs -l 500 -f keycloak/keycloak
+monk logs -l 500 -f keycloak/postgres
+```
+
