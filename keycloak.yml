@@ -20,15 +20,7 @@ base:
 
       Default login/password: monk/monk.
 
-      If running on unsecure http port, you need to run specific action to disable https requirement.
-
-      To do that, connect to your cluster and issue a monk action:
-
-      ``` bash
-      monk do keycloak/keycloak/disable-admin-https
-      ```
-
-      Specify parameters like that: `user=monk pass=monk`.
+      HTTPS requirement for the master realm is automatically disabled on startup for convenience in development mode.
     website: https://www.keycloak.org/
     source: https://github.com/keycloak/keycloak
     publisher: monk.io
@@ -38,7 +30,7 @@ base:
     keycloak:
       image: quay.io/keycloak/keycloak
       image-tag: latest
-      bash: /opt/keycloak/bin/kc.sh start-dev
+      bash: /bin/bash -c '/opt/keycloak/bin/kc.sh start-dev & KC_PID=$!; for i in $(seq 1 30); do sleep 10; cd /opt/keycloak/bin && ./kcadm.sh config credentials --server http://localhost:8080 --realm master --user "$KC_BOOTSTRAP_ADMIN_USERNAME" --password "$KC_BOOTSTRAP_ADMIN_PASSWORD" && ./kcadm.sh update realms/master -s sslRequired=NONE && break; done; wait $KC_PID'
   actions:
     disable-admin-https:
       arguments:
@@ -81,11 +73,11 @@ keycloak:
       type: string
       value: <- "jdbc:postgresql://" connection-hostname("db") split(".dns.podman") join("") "/" $monk_db_name concat-all
     monk_kc_user:
-      env: KEYCLOAK_ADMIN
+      env: KC_BOOTSTRAP_ADMIN_USERNAME
       type: string
       value: <- $kc_user default("monk")
     monk_kc_pass:
-      env: KEYCLOAK_ADMIN_PASSWORD
+      env: KC_BOOTSTRAP_ADMIN_PASSWORD
       type: string
       value: <- $kc_pass default("monk")
     ip-address:
