@@ -21,13 +21,13 @@ base:
       Default login/password: monk/monk.
 
       If running on unsecure http port, you need to run specific action to disable https requirement.
-
+  
       To do that, connect to your cluster and issue a monk action:
-
+  
       ``` bash
       monk do keycloak/keycloak/disable-admin-https
       ```
-
+  
       Specify parameters like that: `user=monk pass=monk`.
     website: https://www.keycloak.org/
     source: https://github.com/keycloak/keycloak
@@ -81,11 +81,11 @@ keycloak:
       type: string
       value: <- "jdbc:postgresql://" connection-hostname("db") split(".dns.podman") join("") "/" $monk_db_name concat-all
     monk_kc_user:
-      env: KEYCLOAK_ADMIN
+      env: KC_BOOTSTRAP_ADMIN_USERNAME
       type: string
       value: <- $kc_user default("monk")
     monk_kc_pass:
-      env: KEYCLOAK_ADMIN_PASSWORD
+      env: KC_BOOTSTRAP_ADMIN_PASSWORD
       type: string
       value: <- $kc_pass default("monk")
     ip-address:
